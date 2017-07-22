@@ -7,5 +7,19 @@ page = agent.get("http://www.sigmaaldrich.com/catalog/search?term=#{chem_search_
   &interface=All&N=0&mode=match%20partialmax&lang=en&region=US&focus=product")
 # get chemical name
 name = page.at("a .name").text
+puts "name: #{name}"
 
-puts name
+# get properties from the page (formula, fw)
+properties = []
+page.at(".nonSynonymProperties").css("p").map do |p|
+  property = p.text
+  properties.push(property)
+end
+# get formula
+formula = properties[0].split(":").last
+formula[0] = "" #this is to remove weird white space left after split
+puts "formula: #{formula}"
+# get molecular weight (formula weight)
+fw = properties[1].split(":").last
+fw[0] = ""  #this is to remove weird white space left after split
+puts "molecular weight: #{fw}"
