@@ -27,12 +27,16 @@ fw[0] = ""  #this is to remove weird white space left after split
 puts "molecular weight: #{fw}"
 
 # click product link
-product_page = page.link_with(href: %r{^/catalog/product/aldrich/\w+}).click
+product_page = page.link_with(href: %r{^/catalog/product/\w+}).click
+# some chemical pages have a product link before the actual product link
+# e.g. methylene chloride: in greener alternative ... there is a link to ethyl acetate/ethanol
+
 # get more properties from product page (generate arrays of strings of keys and values)
 more_properties = []
 product_page.css("#productDetailProperties td").text.split(/\n/).map do |p|
   more_properties.push(p.strip) unless p.strip.empty?
 end
+
 # get density (get index of "density" first; density value comes after "density" in more_properties array)
 density_index = more_properties.index("density")
 density = more_properties[density_index + 2]
