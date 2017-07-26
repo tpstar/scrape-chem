@@ -26,11 +26,18 @@ fw = properties[1].split(":").last
 fw[0] = ""  #this is to remove weird white space left after split
 puts "molecular weight: #{fw}"
 
-# click product link
-product_page = page.link_with(href: %r{^/catalog/product/\w+}).click
 # some chemical pages have a product link before the actual product link
 # e.g. methylene chloride: in greener alternative ... there is a link to ethyl acetate/ethanol
+# that element has class of resultsTextBanner
+# Let's call that banner
+banner = page.search(".resultsTextBanner").css("a").text
 
+!!banner ? link_id = 1 : link_id = 0
+#puts banner
+# click product link
+product_page = page.links_with(href: %r{^/catalog/product/\w+})[2].click
+# some chemical pages have a product link before the actual product link
+# e.g. methylene chloride: in greener alternative ... there is a link to ethyl acetate/ethanol
 # get more properties from product page (generate arrays of strings of keys and values)
 more_properties = []
 product_page.css("#productDetailProperties td").text.split(/\n/).map do |p|
