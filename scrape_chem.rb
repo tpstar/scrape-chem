@@ -32,10 +32,11 @@ puts "molecular weight: #{fw}"
 # Let's call that banner
 banner = page.search(".resultsTextBanner").css("a").text
 
-!!banner ? link_id = 1 : link_id = 0
-#puts banner
+(banner == "") ? link_id = 0 : link_id = 3
+puts link_id
 # click product link
-product_page = page.links_with(href: %r{^/catalog/product/\w+})[2].click
+puts page.links_with(href: %r{^/catalog/product/\w+})[link_id]
+product_page = page.links_with(href: %r{^/catalog/product/\w+})[link_id].click
 # some chemical pages have a product link before the actual product link
 # e.g. methylene chloride: in greener alternative ... there is a link to ethyl acetate/ethanol
 # get more properties from product page (generate arrays of strings of keys and values)
